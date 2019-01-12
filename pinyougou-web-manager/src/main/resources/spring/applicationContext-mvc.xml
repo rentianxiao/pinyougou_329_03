@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--加载外部配置文件-->
+    <context:property-placeholder location="classpath:properties/*.properties" />
+
+    <!--配置注解驱动-->
+    <!--springmvc:默认json解析器 Jackson-->
+    <!--使用第三方的json解析器 fastjson  效率高、自带转换器：string转成date-->
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+                <property name="supportedMediaTypes" value="application/json"/>
+                <property name="features">
+                    <array>
+                        <!--支持空值-->
+                        <value>WriteMapNullValue</value>
+                        <!--string转成date-->
+                        <value>WriteDateUseDateFormat</value>
+                    </array>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <!--文件上传解析器-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!--指定文件上传的大小，限定5MB-->
+        <property name="maxUploadSize" value="5242880"/>
+        <!--指定文件的编码格式-->
+        <property name="defaultEncoding" value="UTF-8"/>
+    </bean>
+    <!--与dubbo整合的配置-->
+    <!-- 引用dubbo 服务 -->
+    <dubbo:application name="pinyougou-web-manager" />
+    <dubbo:registry address="zookeeper://192.168.200.128:2181"/>
+    <dubbo:annotation package="com.pinyougou.core.controller" />
+    <!-- 超时全局设置:单位ms  check=false不检查服务提供方是否存在  1000 -->
+    <dubbo:consumer timeout="600000" check="false"/>
+
+</beans>
