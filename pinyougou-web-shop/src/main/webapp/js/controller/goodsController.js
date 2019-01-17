@@ -259,6 +259,7 @@ app.controller('goodsController' ,function($scope,$controller,$location,typeTemp
     $scope.shangjia = function(id,marketable){
         goodsService.shangjia(id,marketable).success(function(response){
             if(response.flag){
+            	alert("上架成功")
                 $scope.reloadList();//刷新列表
                 $scope.selectIds = [];
             }else{
@@ -271,6 +272,7 @@ app.controller('goodsController' ,function($scope,$controller,$location,typeTemp
     $scope.xiajia = function(id,marketable){
         goodsService.xiajia(id,marketable).success(function(response){
             if(response.flag){
+                alert("下架成功")
                 $scope.reloadList();//刷新列表
                 $scope.selectIds = [];
             }else{
