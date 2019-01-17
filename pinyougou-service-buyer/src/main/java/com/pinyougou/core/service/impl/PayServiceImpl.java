@@ -102,6 +102,64 @@ public class PayServiceImpl implements PayService {
     }
 
     /**
+     * 生成用户支付订单页面需要的二维码
+     * @return
+     */
+    @Override
+    public Map<String, String> payOrder(String userName,Order order) throws Exception {
+
+        Long orderId = order.getOrderId();
+
+        // 生成支付页面需要的数据
+        HashMap<String, String> data = new HashMap<>();
+        // 支付订单号（交易流水号)
+        //long out_trade_no = idWorker.nextId();
+
+        // 1、调用微信统一下单的接口地址
+        String url = "https://api.mch.weixin.qq.com/pay/unifiedorder";
+
+        // 2、统一下单接口需要提交的参数
+        // 公众账号ID	appid	是	String(32)	wxd678efh567hg6787	微信支付分配的公众账号ID（企业号corpid即为此appId）
+        data.put("appid",appid);
+        // 商户号	mch_id	是	String(32)	1230000109	微信支付分配的商户号
+        data.put("mch_id",partner);
+        // 随机字符串	nonce_str	是	String(32)	5K8264ILTKCH16CQ2502SI8ZNMTM67VS	随机字符串，长度要求在32位以内。推荐随机数生成算法
+        data.put("nonce_str", WXPayUtil.generateNonceStr());
+        // 商品描述	body	是	String(128)	腾讯充值中心-QQ会员充值
+        data.put("body","个人未支付订单支付");
+        //商品简单描述，该字段请按照规范传递，具体请见参数规定
+        // 商户订单号	out_trade_no	是	String(32)	20150806125346	商户系统内部订单号，要求32个字符内，只能是数字、大小写字母_-|* 且在同一个商户号下唯一。详见商户订单号
+        data.put("out_trade_no",String.valueOf(orderId));
+        // 标价金额	total_fee	是	Int	88	订单总金额，单位为分，详见支付金额
+        data.put("total_fee","1");      // 支付金额，测试阶段使用
+        //data.put("total_fee",String.valueOf(order.getPayment())); //实际工作中是从redis中取
+        // 终端IP	spbill_create_ip	是	String(16)	123.12.12.123	支持IPV4和IPV6两种格式的IP地址。调用微信支付API的机器IP
+        data.put("spbill_create_ip","192.168.200.128");
+        // 通知地址	notify_url	是	String(256)	http://www.weixin.qq.com/wxpay/pay.php	异步接收微信支付结果通知的回调地址，通知url必须为外网可访问的url，不能携带参数。
+        data.put("notify_url",notifyurl);
+        // 交易类型	trade_type	是	String(16)	JSAPI
+        data.put("trade_type","NATIVE");
+        // 微信系统规定：提交的数据是xml格式，将map集合转成xml(并且会生成签名)
+        WXPayUtil.generateSignedXml(data,partnerkey);
+
+        //3、通过HttpClient模拟浏览器发送请求
+        HttpClient httpClient = new HttpClient(url);    //请求的url
+        httpClient.setHttps(true);          // 支持https
+        String xmlParam = WXPayUtil.generateSignedXml(data, partnerkey);
+        httpClient.setXmlParam(xmlParam);   // 微信下单接口需要的数据（请求的数据）
+        httpClient.post();                  // 发送请求
+
+        //4、请求完成后，获取响应的结果
+        String strXml = httpClient.getContent();   //数据格式：xml
+
+        //5、将响应的数据转成map
+        Map<String, String> map = WXPayUtil.xmlToMap(strXml);
+        map.put("total_fee",String.valueOf(order.getPayment()));    //展示的金额
+        map.put("out_trade_no",String.valueOf(order.getOrderId()));//交易的订单号
+        return map;
+    }
+
+    /**
      * 查询订单
      * @param out_trade_no
      * @return

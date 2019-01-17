@@ -1,14 +1,18 @@
 package com.pinyougou.core.controller.user;
 
+import cn.itcast.core.pojo.entity.PageResult;
 import cn.itcast.core.pojo.entity.Result;
+import cn.itcast.core.pojo.order.Order;
 import cn.itcast.core.pojo.user.User;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.pinyougou.core.service.UserService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import util.PhoneFormatCheckUtils;
 
+import java.util.List;
 import java.util.regex.PatternSyntaxException;
 
 @RestController
@@ -57,5 +61,29 @@ public class UserController {
             e.printStackTrace();
             return new Result(true, "注册失败");
         }
+    }
+
+
+    /**
+     * 2019-1-14订单的分页查询
+     * @param page
+     * @param rows
+     * @param order
+     * @return
+     */
+    @RequestMapping("/search.do")
+    public PageResult search(Integer page, Integer rows , @RequestBody Order order) {
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userService.search(userName,page,rows,order);
+    }
+
+    /**
+     * 用户信息查询
+     * @return
+     */
+    @RequestMapping("/findUser.do")
+    public List<User> findUser() {
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userService.findUser(userName);
     }
 }

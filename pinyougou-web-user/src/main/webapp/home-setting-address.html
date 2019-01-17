@@ -10,11 +10,18 @@
 
     <link rel="stylesheet" type="text/css" href="css/webbase.css" />
     <link rel="stylesheet" type="text/css" href="css/pages-seckillOrder.css" />
+
+	<script type="text/javascript" src="plugins/angularjs/angular.min.js"></script>
+	<script type="text/javascript" src="js/base.js"></script>
+	<script type="text/javascript" src="js/service/loginService.js"></script>
+	<!-- 引入模块以及控制器-->
+	<script type="text/javascript" src="js/service/addressService.js"></script>
+	<script type="text/javascript" src="js/controller/addressController.js"></script>
+
 </head>
 
-<body>
-    <!-- 头部栏位 -->
-    <!--页面顶部-->
+<body ng-app="pinyougou" ng-controller="addressController" ng-init="findAddressList();showName();">
+
 <div id="nav-bottom">
 	<!--顶部-->
 	<div class="nav-top">
@@ -142,9 +149,6 @@ $(function(){
 <script type="text/javascript" src="js/plugins/sui/sui.min.js"></script>
 <script type="text/javascript" src="js/plugins/jquery-placeholder/jquery.placeholder.min.js"></script>
 <script type="text/javascript" src="js/widget/nav.js"></script>
-<script type="text/javascript" src="pages/userInfo/distpicker.data.js"></script>
-<script type="text/javascript" src="pages/userInfo/distpicker.js"></script>
-<script type="text/javascript" src="pages/userInfo/main.js"></script>
 </body>
     <!--header-->
     <div id="account">
@@ -156,7 +160,7 @@ $(function(){
                     <div class="person-info">
                         <div class="person-photo"><img src="img/_/photo.png" alt=""></div>
                         <div class="person-account">
-                            <span class="name">Michelle</span>
+                            <span class="name">{{loginName}}</span>
                             <span class="safe">账户安全</span>
                         </div>
                         <div class="clearfix"></div>
@@ -191,10 +195,10 @@ $(function(){
                     <div class="body userAddress">
                         <div class="address-title">
                             <span class="title">地址管理</span>
-                            <a data-toggle="modal" data-target=".edit" data-keyboard="false"   class="sui-btn  btn-info add-new">添加新地址</a>
+                            <a data-toggle="modal" data-target=".edit" data-keyboard="false"   class="sui-btn  btn-info add-new" ng-click="entity={}">添加新地址</a>
                             <span class="clearfix"></span>
                         </div>
-                        <div class="address-detail">
+                        <div class="address-detail" >
                             <table class="sui-table table-bordered">
                                 <thead>
                                     <tr>
@@ -204,25 +208,15 @@ $(function(){
                                         <th>操作</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>刘田田</td>
-                                        <td>北京 北京市 海淀区 上地街道东北旺西路8号中关村软件园9号楼</td>
-                                        <td>1774***********4</td>
+                                <tbody >
+                                    <tr ng-repeat="entry in addressList">
+                                        <td>{{entry.userId}}</td>
+                                        <td>{{entry.address}}</td>
+                                        <td>{{entry.mobile.substring(0,4)}}***********{{entry.mobile.charAt(entry.mobile.length-1)}}</td>
                                         <td>
                                             <a href="#">编辑</a>
                                             <a href="#">删除</a>
                                             默认地址
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>沈沉</td>
-                                        <td>北京 北京市 海淀区 上地街道东北旺西路8号中关村软件园9号楼</td>
-                                        <td>1774***********4</td>
-                                        <td>
-                                            <a href="#">编辑</a>
-                                            <a href="#">删除</a>
-                                            <a href="#">设为默认</a>
                                         </td>
                                     </tr>
                                     
@@ -240,9 +234,9 @@ $(function(){
                                     <div class="modal-body">
                                         <form action="" class="sui-form form-horizontal">
                                             <div class="control-group">
-                                            <label class="control-label">收货人：</label>
+                                            <label class="control-label" >收货人：</label>
                                             <div class="controls">
-                                                <input type="text" class="input-medium">
+                                                <input type="text" class="input-medium" ng-model="entity.userId">
                                             </div>
                                         </div>
                                         <div class="control-group">

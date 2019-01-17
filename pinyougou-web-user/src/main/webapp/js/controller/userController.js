@@ -1,6 +1,18 @@
  //控制层 
-app.controller('userController' ,function($scope,$controller   ,userService){	
-	
+app.controller('userController' ,function($scope,$controller ,loginService ,userService,uploadService){
+
+	// AngularJS中的继承:伪继承
+    $controller('baseController',{$scope:$scope});
+
+    //显示当前用户名
+    $scope.showName = function () {
+        loginService.showName().success(
+            function (response) {
+                $scope.loginName = response.loginName;
+            }
+        );
+    }
+
 	//注册用户
 	$scope.reg=function(){
 		
@@ -32,5 +44,24 @@ app.controller('userController' ,function($scope,$controller   ,userService){
 			}
 		);		
 	}
-	
+
+    //显示当前用户名
+    $scope.findUser = function () {
+        userService.findUser().success(
+            function (response) {
+                $scope.userList = response;
+            }
+        );
+    }
+
+    // 文件上传的方法:
+    $scope.uploadFile = function(){
+        uploadService.uploadFile().success(function(response){
+            if(response.flag){
+                $scope.entity.pic = response.message;
+            }else{
+                alert(response.message);
+            }
+        });
+    }
 });	

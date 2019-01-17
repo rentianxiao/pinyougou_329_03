@@ -1,5 +1,6 @@
 package cn.itcast.core.dao.order;
 
+import cn.itcast.core.pojo.item.Item;
 import cn.itcast.core.pojo.order.Order;
 import cn.itcast.core.pojo.order.OrderQuery;
 import org.apache.ibatis.annotations.Param;
