@@ -4,6 +4,8 @@ import cn.itcast.core.pojo.entity.PageResult;
 import cn.itcast.core.pojo.good.Goods;
 import cn.itcast.core.pojo.vo.GoodsVo;
 
+import java.util.List;
+
 public interface GoodsService {
 
     /**
@@ -68,4 +70,6 @@ public interface GoodsService {
      * @param isMarketable
      */
     public void xiajia(Long id,String isMarketable);
+
+    List<Goods> findAll();
 }
