@@ -28,16 +28,30 @@
 
     <bean id="pageAndSolrListener" class="com.pinyougou.core.listener.ItemSearchListener"></bean>
 
-    <!-- 点对点模式，删除索引库-->
+    <!--发布订阅模式, 索引删除-->
+    <bean id="SolrDeleteDestination" class="org.apache.activemq.command.ActiveMQTopic">
+        <constructor-arg value="pinyougou_topic_delete_page_solr"/>
+    </bean>
+
+    <!-- 发布订阅模式, 消息监听容器, 将数据从solr索引库删除 -->
+    <bean class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="connectionFactory" />
+        <property name="destination" ref="SolrDeleteDestination" />
+        <property name="messageListener" ref="itemDeleteListener" />
+    </bean>
+    <bean id="itemDeleteListener" class="com.pinyougou.core.listener.ItemDeleteListener"></bean>
+
+    <!--&lt;!&ndash; 点对点模式，删除索引库&ndash;&gt;
     <bean id="queueSolrDeleteDestination" class="org.apache.activemq.command.ActiveMQQueue">
         <constructor-arg value="pinyougou_queue_solr_delete"/>
     </bean>
 
-    <!--点对点模式, 消息监听容器  删除索引库-->
+    &lt;!&ndash;点对点模式, 消息监听容器  删除索引库&ndash;&gt;
     <bean class="org.springframework.jms.listener.DefaultMessageListenerContainer">
         <property name="connectionFactory" ref="connectionFactory" />
         <property name="destination" ref="queueSolrDeleteDestination" />
         <property name="messageListener" ref="itemDeleteListener" />
     </bean>
-    <bean id="itemDeleteListener" class="com.pinyougou.core.listener.ItemDeleteListener"></bean>
+    <bean id="itemDeleteListener" class="com.pinyougou.core.listener.ItemDeleteListener"></bean>-->
 </beans>
+

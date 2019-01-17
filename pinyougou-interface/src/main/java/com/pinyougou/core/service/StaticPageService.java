@@ -7,4 +7,10 @@ public interface StaticPageService {
      * @param id
      */
     public void getStaticPage(Long id);
+
+    /**
+     * 删除页面
+     * @param id
+     */
+    public boolean deleteFile(String id);
 }

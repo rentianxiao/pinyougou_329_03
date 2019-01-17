@@ -16,6 +16,7 @@ public class ItemDeleteListener implements MessageListener{
     @Resource
     private ItemSearchService itemSearchService;
 
+    @Override
     public void onMessage(Message message) {
         try {
             // 获取消息

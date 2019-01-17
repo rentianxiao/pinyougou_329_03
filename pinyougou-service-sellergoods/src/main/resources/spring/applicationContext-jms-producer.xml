@@ -29,4 +29,9 @@
     <bean id="queueSolrDeleteDestination" class="org.apache.activemq.command.ActiveMQQueue">
         <constructor-arg value="pinyougou_queue_solr_delete"/>
     </bean>
+
+    <!-- 发布订阅模式, 下架删除索引 -->
+    <bean id="SolrDeleteDestination" class="org.apache.activemq.command.ActiveMQTopic">
+        <constructor-arg value="pinyougou_topic_delete_page_solr"/>
+    </bean>
 </beans>

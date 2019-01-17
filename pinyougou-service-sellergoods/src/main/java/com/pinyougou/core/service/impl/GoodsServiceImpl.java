@@ -63,6 +63,8 @@ public class GoodsServiceImpl implements GoodsService {
     @Resource
     private Destination queueSolrDeleteDestination;
 
+    @Resource
+    private Destination SolrDeleteDestination;
     /**
      * 录入商品
      *
@@ -250,7 +252,7 @@ public class GoodsServiceImpl implements GoodsService {
                 goods.setId(id);
                 //1、更新商品的审核状态
                 goodsDao.updateByPrimaryKeySelective(goods);
-                if("1".equals(Status)){    //审核成功
+                /*if("1".equals(Status)){    //审核成功
                     //发送消息到MQ中
                     jmsTemplate.send(topicPageAndSolrDestination, new MessageCreator() {
                         @Override
@@ -260,10 +262,13 @@ public class GoodsServiceImpl implements GoodsService {
                             return textMessage;
                         }
                     });
-                }
+                }*/
             }
         }
     }
+
+
+
 
 
     //将数据库中库存的所有数据导入到索引库
@@ -351,5 +356,57 @@ public class GoodsServiceImpl implements GoodsService {
         item.setBrand(brandDao.selectByPrimaryKey(goods.getBrandId()).getName());
         //设置商家店铺名称
         item.setSeller(sellerDao.selectByPrimaryKey(goods.getSellerId()).getNickName());
+    }
+
+    /**
+     * 上架
+     * @param id
+     * @param isMarketable
+     */
+    @Override
+    public void shangjia(final Long id, String isMarketable) {
+        Goods goods1 = goodsDao.selectByPrimaryKey(id);
+        String auditStatus = goods1.getAuditStatus();
+        if ("1".equals(auditStatus)) {
+            Goods goods = new Goods();
+            goods.setIsMarketable(isMarketable);
+            goods.setId(id);
+            goodsDao.updateByPrimaryKeySelective(goods);
+            if ("1".equals(isMarketable)) {
+                jmsTemplate.send(topicPageAndSolrDestination, new MessageCreator() {
+                    @Override
+                    public Message createMessage(Session session) throws JMSException {
+                        TextMessage textMessage = session.createTextMessage(String.valueOf(id));
+                        return textMessage;
+                    }
+                });
+            }
+        }
+    }
+
+    /**
+     * 下架
+     * @param id
+     * @param isMarketable
+     */
+    @Override
+    public void xiajia(final Long id, String isMarketable) {
+        Goods goods1 = goodsDao.selectByPrimaryKey(id);
+        String auditStatus = goods1.getAuditStatus();
+        if ("1".equals(auditStatus)) {
+            Goods goods = new Goods();
+            goods.setIsMarketable(isMarketable);
+            goods.setId(id);
+            goodsDao.updateByPrimaryKeySelective(goods);
+            if ("0".equals(isMarketable)) {
+                jmsTemplate.send(SolrDeleteDestination, new MessageCreator() {
+                    @Override
+                    public Message createMessage(Session session) throws JMSException {
+                        TextMessage textMessage = session.createTextMessage(String.valueOf(id));
+                        return textMessage;
+                    }
+                });
+            }
+        }
     }
 }

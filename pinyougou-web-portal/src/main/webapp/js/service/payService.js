@@ -9,4 +9,8 @@ app.service('payService',function($http){
 	this.queryPayStatus=function(out_trade_no){
 		return $http.get('pay/queryPayStatus.do?out_trade_no='+out_trade_no);
 	}
+    //关闭订单支付
+    this.orderClose=function(out_trade_no){
+        return $http.get('pay/orderClose.do?out_trade_no='+out_trade_no);
+    }
 });
