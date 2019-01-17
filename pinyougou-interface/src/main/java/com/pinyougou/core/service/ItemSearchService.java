@@ -22,4 +22,10 @@ public interface ItemSearchService {
      * @param id
      */
     public void deleteItemFromSolr(Long id);
+
+    /**
+     * 加入收藏
+     * @param id
+     */
+    String addToCollection(Long id , String username);
 }

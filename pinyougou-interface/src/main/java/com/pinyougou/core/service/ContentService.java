@@ -2,8 +2,10 @@ package com.pinyougou.core.service;
 
 import cn.itcast.core.pojo.ad.Content;
 import cn.itcast.core.pojo.entity.PageResult;
+import cn.itcast.core.pojo.good.Brand;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ContentService {
 
@@ -26,4 +28,16 @@ public interface ContentService {
 	 */
 	public List<Content> findByCategoryId(Long categoryId);
 
+	/**
+	 * 前台分类查询
+	 * @param
+	 * @return
+	 */
+	Map<String,Map<String,List<String>>> findAllItemCat();
+
+	/**
+	 * 查询品牌名称(楼层广告)
+	 * @return
+	 */
+	List<Brand> findBrandName();
 }

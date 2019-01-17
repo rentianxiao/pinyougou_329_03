@@ -98,6 +98,19 @@ app.controller('searchController',function($scope,$location,searchService){
 			return false;
 		}	
 	}
+
+    //加入收藏
+    $scope.addToCollection = function(id){
+        searchService.addToCollection(id).success(
+            function(response){
+                if(response.flag){//如果成功
+                    alert(response.message);
+                }else{
+                    alert(response.message);
+                }
+            }
+        );
+    }
 	
 	//排序查询
 	//sortField: 排序的字段    sort： 排序的规则

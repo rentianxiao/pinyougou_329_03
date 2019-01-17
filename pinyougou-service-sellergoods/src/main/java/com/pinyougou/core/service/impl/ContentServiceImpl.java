@@ -1,9 +1,14 @@
 package com.pinyougou.core.service.impl;
 
 import cn.itcast.core.dao.ad.ContentDao;
+import cn.itcast.core.dao.good.BrandDao;
+import cn.itcast.core.dao.item.ItemCatDao;
 import cn.itcast.core.pojo.ad.Content;
 import cn.itcast.core.pojo.ad.ContentQuery;
 import cn.itcast.core.pojo.entity.PageResult;
+import cn.itcast.core.pojo.good.Brand;
+import cn.itcast.core.pojo.item.ItemCat;
+import cn.itcast.core.pojo.item.ItemCatQuery;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -13,7 +18,10 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 
@@ -25,6 +33,12 @@ public class ContentServiceImpl implements ContentService {
 
 	@Resource
 	private RedisTemplate<String,Object> redisTemplate;
+
+	@Resource
+	private ItemCatDao itemCatDao;
+
+	@Resource
+	private BrandDao brandDao;
 
 	@Override
 	public List<Content> findAll() {
@@ -113,6 +127,68 @@ public class ContentServiceImpl implements ContentService {
 	}
 
 	/**
+	 * 前台分类查询
+	 * @param
+	 * @return
+	 */
+	@Override
+	public Map<String, Map<String, List<String>>> findAllItemCat() {
+		//在缓存中查询Map
+		Map<String, Map<String, List<String>>> itemCatMap = (Map<String, Map<String, List<String>>>) redisTemplate.boundHashOps("findAllItemCat").get("findAllItemCat");
+		//如果缓存中没有Map,则在数据库中查询
+		if (itemCatMap == null) {
+			itemCatMap = new HashMap<>();
+			//查询一级分类,即父类ID为0
+			ItemCatQuery itemCatQuery = new ItemCatQuery();
+			itemCatQuery.createCriteria().andParentIdEqualTo(0L);
+			//第一层
+			List<ItemCat> itemCatList1 = itemCatDao.selectByExample(itemCatQuery);
+			for (ItemCat itemCat : itemCatList1) {
+				ItemCatQuery itemCatQuery1 = new ItemCatQuery();
+				itemCatQuery1.createCriteria().andParentIdEqualTo(itemCat.getId());
+				//第二层
+				List<ItemCat> itemCatList2 = itemCatDao.selectByExample(itemCatQuery1);
+				Map<String, List<String>> itemCatMap1 = new HashMap<>();
+				for (ItemCat itemCat2 : itemCatList2) {
+					ItemCatQuery itemCatQuery2 = new ItemCatQuery();
+					itemCatQuery2.createCriteria().andParentIdEqualTo(itemCat2.getId());
+					//第三层
+					List<ItemCat> itemCatList3 = itemCatDao.selectByExample(itemCatQuery2);
+					List<String> itemList = new ArrayList<>();
+					for (ItemCat itemCat3 : itemCatList3) {
+						//向List<String> itemList中添加数据
+						itemList.add(itemCat3.getName());
+					}
+					itemCatMap1.put(itemCat2.getName(), itemList);
+				}
+				itemCatMap.put(itemCat.getName(), itemCatMap1);
+			}
+			//查询后将数据存入缓存
+			redisTemplate.boundHashOps("findAllItemCat").put("findAllItemCat", itemCatMap);
+		}
+		return itemCatMap;
+	}
+
+	/**
+	 * 查询品牌名称(楼层广告)
+	 * @return
+	 */
+    @Override
+    public List<Brand> findBrandName() {
+		List<Brand> brands = (List<Brand>) redisTemplate.boundHashOps("findBrandName").get("findBrandName");
+		if (brands == null) {
+			brands = new ArrayList<>();
+			List<Brand> brandList = brandDao.selectByExample(null);
+			for (int i = 0; i < 6; i++) {
+				Brand brand = brandList.get(i);
+				brands.add(brand);
+			}
+			redisTemplate.boundHashOps("findBrandName").put("findBrandName", brands);
+		}
+		return brands;
+    }
+
+    /**
 	 * //清空缓存数据
 	 * @param categoryId
 	 */
