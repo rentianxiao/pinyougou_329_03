@@ -196,30 +196,4 @@ public class BrandServiceImpl implements BrandService {
         return brandDao.selectOption(status);
     }
 
-    @Override
-    public PageResult searchAll(Integer pageNum, Integer pageSize, Brand brand, String name) {
-        //1.设置分页条件
-        PageHelper.startPage(pageNum, pageSize);
-        //2.设置查询条件
-        BrandQuery brandQuery = new BrandQuery();
-        BrandQuery.Criteria criteria = brandQuery.createCriteria();
-        if (brand.getName() != null && !"".equals(brand.getName().trim())) {
-            criteria.andNameLike("%" + brand.getName().trim() + "%");
-        }
-        if (brand.getFirstChar() != null && !"".equals(brand.getFirstChar().trim())) {
-            criteria.andFirstCharEqualTo(brand.getFirstChar().trim());
-        }
-        //设置根据id降序
-        brandQuery.setOrderByClause("id desc");
-        //3.根据条件查询
-        Page<Brand> page = (Page<Brand>) brandDao.searchAll(brandQuery,name);
-
-        //4.将结果封装到PageResult中并返回
-        PageResult pageResult = new PageResult(page.getResult(), page.getTotal());
-        return pageResult;
-
-
-    }
-
-
 }

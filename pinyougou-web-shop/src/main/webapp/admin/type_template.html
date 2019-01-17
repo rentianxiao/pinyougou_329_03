@@ -85,7 +85,7 @@
 				<td>{{jsonToString(entity.specIds,'text')}}</td>
 				<td>{{jsonToString(entity.customAttributeItems,'text')}}</td>
 				<td>
-					{{entity.status==0?'未申请':(entity.status==1?'已申请':entity.status==1?'审核通过':(entity.status==2?'审核未通过':'关闭商家'))}}
+					{{entity.status==0?'未申请':(entity.status==1?'已申请':entity.status==2?'审核通过':(entity.status==3?'审核未通过':'审核未通过'))}}
 				</td>
 			</tr>
 			</tbody>

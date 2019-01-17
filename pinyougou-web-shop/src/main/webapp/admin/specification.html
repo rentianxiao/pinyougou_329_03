@@ -68,7 +68,7 @@
 										  <td>
 
 											  <span>
-											  {{entity.status==0?'未申请':(entity.status==1?'已申请':entity.status==1?'审核通过':(entity.status==2?'审核未通过':'关闭商家'))}}
+											  {{status[entity.status]}}
 											  </span>
 										  </td>
 			                          </tr>
