@@ -59,4 +59,28 @@ public interface BrandService {
      * @return
      */
     public List<Map<String,String>> selectOptionList();
+
+
+
+   /*根据名字查询全部  --张斌*/
+    List<Brand> findAllByUser(String name);
+    /*
+    *
+    * 添加品牌 --张斌
+    * */
+    void add(Brand brand,String name);
+
+    /*
+    修改状态 --张斌
+    * */
+    void updateStatus(Long[] ids, String status);
+
+
+    /*新增模板时根据状态--张斌
+     * 初始化品牌列表*/
+    List<Map<String,String>> selectOption();
+
+
+
+
 }

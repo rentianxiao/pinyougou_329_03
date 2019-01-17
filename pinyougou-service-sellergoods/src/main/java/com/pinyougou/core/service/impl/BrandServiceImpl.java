@@ -148,4 +148,78 @@ public class BrandServiceImpl implements BrandService {
     }
 
 
+
+
+    /*
+    * 通过用户名查询全部 --张斌
+    * */
+    @Override
+    public List<Brand> findAllByUser(String name) {
+
+        return brandDao.selectByName(name);
+
+    }
+
+    /*添加品牌 --张斌*/
+    @Transactional
+    @Override
+    public void add(Brand brand,String name) {
+        brand.setBrandStatus("0");
+        brand.setSellerId(name);
+        brandDao.insertSelective(brand);
+    }
+
+    /*
+    * 修改审核状态 --张斌
+    * */
+    @Override
+    public void updateStatus(Long[] ids, String status) {
+        if (ids != null && ids.length > 0) {
+            Brand brand = new Brand();
+            brand.setBrandStatus(status);
+            for (Long id : ids) {
+                brand.setId(id);
+                brandDao.updateByPrimaryKeySelective(brand);
+
+            }
+        }
+    }
+
+    /*
+    * 新增模板时根据状态
+    * 初始化品牌列表    --张斌
+    *
+    * */
+    @Override
+    public List<Map<String, String>> selectOption() {
+        String status="2";
+        return brandDao.selectOption(status);
+    }
+
+    @Override
+    public PageResult searchAll(Integer pageNum, Integer pageSize, Brand brand, String name) {
+        //1.设置分页条件
+        PageHelper.startPage(pageNum, pageSize);
+        //2.设置查询条件
+        BrandQuery brandQuery = new BrandQuery();
+        BrandQuery.Criteria criteria = brandQuery.createCriteria();
+        if (brand.getName() != null && !"".equals(brand.getName().trim())) {
+            criteria.andNameLike("%" + brand.getName().trim() + "%");
+        }
+        if (brand.getFirstChar() != null && !"".equals(brand.getFirstChar().trim())) {
+            criteria.andFirstCharEqualTo(brand.getFirstChar().trim());
+        }
+        //设置根据id降序
+        brandQuery.setOrderByClause("id desc");
+        //3.根据条件查询
+        Page<Brand> page = (Page<Brand>) brandDao.searchAll(brandQuery,name);
+
+        //4.将结果封装到PageResult中并返回
+        PageResult pageResult = new PageResult(page.getResult(), page.getTotal());
+        return pageResult;
+
+
+    }
+
+
 }

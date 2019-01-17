@@ -4,6 +4,7 @@ import cn.itcast.core.pojo.item.ItemCat;
 import cn.itcast.core.pojo.item.ItemCatQuery;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface ItemCatDao {
@@ -28,4 +29,11 @@ public interface ItemCatDao {
     int updateByPrimaryKeySelective(ItemCat record);
 
     int updateByPrimaryKey(ItemCat record);
+
+    List<ItemCat> select(@Param("name")String name);
+
+   /*
+   * 根据用户名和 id 查出全部  --张斌
+   * */
+    List<ItemCat> selectByNameId(@Param("parentId")Long parentId,@Param("name") String name);
 }

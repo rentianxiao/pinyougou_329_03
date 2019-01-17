@@ -48,4 +48,26 @@ public interface SpecificationService {
      * @return
      */
     public List<Map<String,String>> selectOptionList();
+
+
+
+    /*
+     * 通过用户名查询全部 --张斌
+     * */
+    List<Specification> findAllByUser(String name);
+    /*添加品牌 --张斌*/
+    void addList(SpecificationVo specVo, String name);
+
+    /*
+     * 修改审核状态 --张斌
+     * */
+    void update(Long[] ids, String status);
+
+    /*
+     * 新增模板时根据状态
+     * 初始化品牌列表    --张斌
+     *
+     * */
+
+    List<Map<String,String>> selectOption();
 }

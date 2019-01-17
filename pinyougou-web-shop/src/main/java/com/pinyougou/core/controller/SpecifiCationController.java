@@ -1,9 +1,12 @@
 package com.pinyougou.core.controller;
 
+
 import cn.itcast.core.pojo.entity.Result;
-import cn.itcast.core.pojo.template.TypeTemplate;
+import cn.itcast.core.pojo.specification.Specification;
+import cn.itcast.core.pojo.vo.SpecificationVo;
+
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.pinyougou.core.service.TypeTemplateService;
+import com.pinyougou.core.service.SpecificationService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,49 +16,51 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/typeTemplate")
-public class TypeTemplateController {
+@RequestMapping("specification")
+public class SpecifiCationController {
 
     @Reference
-    private TypeTemplateService typeTemplateService;
+    private SpecificationService specService;
 
-    /*回显模板*/
     @RequestMapping("findAll.do")
-    public List<TypeTemplate> findAll(){
+    public List<Specification> findAll(){
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
-        return typeTemplateService.findAll(name);
-
+        return  specService.findAllByUser(name);
 
     }
 
-
-    /*添加*/
     @RequestMapping("add.do")
-    public Result add(@RequestBody TypeTemplate typeTemplate){
-
+    public Result add(@RequestBody SpecificationVo specVo){
         try {
             String name = SecurityContextHolder.getContext().getAuthentication().getName();
-            typeTemplateService.insert(typeTemplate,name);
-            return new Result(true,"成功");
+            specService.addList(specVo,name);
+            return new Result(true, "保存成功");
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result(false,"失败");
+            return new Result(false, "保存失败");
         }
+
     }
 
 
-
-    /**/
     @RequestMapping("updateStatus.do")
-    public Result updateStatus(Long[]ids,String status){
+    public Result updateStatus(Long[] ids, String status){
 
         try {
-            typeTemplateService.updateStatus(ids,status);
-            return new Result(true,"成功");
+            specService.update(ids, status);
+            return new Result(true, "保存成功");
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result(false,"失败");
+            return new Result(false, "保存失败");
         }
+
+
     }
+
+    @RequestMapping("selectOptionList.do")
+    public List<Map<String,String>> selectOptionList(){
+        return specService.selectOptionList();
+    }
+
 
 }

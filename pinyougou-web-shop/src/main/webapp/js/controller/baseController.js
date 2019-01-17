@@ -1,4 +1,4 @@
-app.controller("baseController",function($scope){
+app.controller("baseController",function($scope,$window){
 	// 分页的配置的信息
 	$scope.paginationConf = {
 		 currentPage: 1, // 当前页数
@@ -14,6 +14,8 @@ app.controller("baseController",function($scope){
 		// $scope.findByPage($scope.paginationConf.currentPage,$scope.paginationConf.itemsPerPage);
 		$scope.search($scope.paginationConf.currentPage,$scope.paginationConf.itemsPerPage);
 	}
+
+
 	
 	// 定义一个数组:
 	$scope.selectIds = [];

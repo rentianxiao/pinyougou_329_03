@@ -114,7 +114,42 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
         return specList;
     }
 
-    /**
-     * 更新模板
-     */
+
+    /*回显模板
+     * -- 张斌
+     * */
+    @Override
+    public List<TypeTemplate> findAll(String name) {
+
+
+        return typeTemplateDao.select(name);
+    }
+
+
+
+    /*添加
+     * -- 张斌
+     * */
+    @Transactional
+    @Override
+    public void insert(TypeTemplate typeTemplate,String name) {
+        typeTemplate.setSellerId(name);
+        typeTemplate.setStatus("0");
+        typeTemplateDao.insertSelective(typeTemplate);
+    }
+    /*提交申请
+     * -- 张斌
+     * */
+    @Override
+    public void updateStatus(Long[] ids, String status) {
+        if (ids != null && ids.length > 0) {
+            TypeTemplate specification = new TypeTemplate();
+            specification.setStatus(status);
+            for (Long id : ids) {
+                specification.setId(id);
+                typeTemplateDao.updateByPrimaryKeySelective(specification);
+
+            }
+        }
+    }
 }

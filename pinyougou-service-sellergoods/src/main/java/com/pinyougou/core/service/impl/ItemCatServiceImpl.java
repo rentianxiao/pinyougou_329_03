@@ -6,6 +6,7 @@ import cn.itcast.core.pojo.item.ItemCatQuery;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.pinyougou.core.service.ItemCatService;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -62,4 +63,68 @@ public class ItemCatServiceImpl implements ItemCatService {
     public List<ItemCat> findAll() {
         return itemCatDao.selectByExample(null);
     }
+
+     /*
+     * 查询全部 --张斌
+     *
+     * */
+    @Override
+    public List<ItemCat> findByName(String name) {
+        return itemCatDao.select(name);
+    }
+
+
+    /*
+     * 根据用户名和 id 查出全部  --张斌
+     *
+     * */
+    @Override
+    public List<ItemCat> findByParentId(Long parentId,String name) {
+        List<ItemCat> itemCatList = itemCatDao.selectByNameId(parentId,name);
+        return itemCatList;
+
+    }
+
+
+    /*
+     * 修改状态 --张斌
+     * */
+    @Override
+    public void updateStatus(Long[] ids, String status) {
+        if (ids != null && ids.length > 0) {
+            ItemCat itemCat = new ItemCat();
+            itemCat.setStatus(status);
+            for (Long id : ids) {
+                itemCat.setId(id);
+                itemCatDao.updateByPrimaryKeySelective(itemCat);
+
+            }
+        }
+    }
+
+    /*
+     * 保存 --张斌
+     * */
+    @Transactional
+    @Override
+    public void save(ItemCat itemCat,String name) {
+        itemCat.setStatus("0");
+        itemCat.setSellerId(name);
+        itemCatDao.insertSelective(itemCat);
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
