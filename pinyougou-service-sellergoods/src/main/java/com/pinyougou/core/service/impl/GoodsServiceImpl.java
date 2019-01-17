@@ -319,6 +319,11 @@ public class GoodsServiceImpl implements GoodsService {
         }
     }
 
+    @Override
+    public List<Goods> findAll() {
+        return goodsDao.selectByExample(null);
+    }
+
     /**
      * 设置库存公共属性
      *
