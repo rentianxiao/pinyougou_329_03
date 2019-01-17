@@ -167,4 +167,31 @@ public class PayServiceImpl implements PayService {
         System.out.println(strXml);
         return map;
     }
+
+    /**
+     * 关闭订单支付页面
+     * @return
+     */
+    @Override
+    public Map<String, String> orderClose(String out_trade_no) throws Exception {
+        Map<String, String> data=new HashMap<>();
+        String url="https://api.mch.weixin.qq.com/pay/closeorder";
+        //应用ID	appid	是	String(32)	wx8888888888888888	微信开放平台审核通过的应用APPID
+        data.put("appid",appid);
+        //商户号	mch_id	是	String(32)	1900000109	微信支付分配的商户号
+        data.put("mch_id",partner);
+        //商户订单号	out_trade_no	是	String(32)	1217752501201407033233368018	商户系统内部订单号，要求32个字符内，只能是数字、大小写字母_-|*@ ，且在同一个商户号下唯一。
+        data.put("out_trade_no",out_trade_no);
+        //随机字符串	nonce_str	是	String(32)	5K8264ILTKCH16CQ2502SI8ZNMTM67VS	商户系统内部的订单号,32个字符内、可包含字母, 其他说明见安全规范
+        data.put("nonce_str",WXPayUtil.generateNonceStr());
+        // 签名	sign	是	String(32)	C380BEC2BFD727A4B6845133519F3AD6	签名，详见签名生成算法
+        String xmlParam=WXPayUtil.generateSignedXml(data,partnerkey);
+        HttpClient httpClient = new HttpClient(url);
+        httpClient.setXmlParam(xmlParam);
+        httpClient.setHttps(true);
+        httpClient.post();
+        String strXML = httpClient.getContent();
+        Map<String, String> map = WXPayUtil.xmlToMap(strXML);
+        return map;
+    }
 }

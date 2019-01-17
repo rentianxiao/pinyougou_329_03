@@ -73,4 +73,26 @@ public class GoodsController {
             return new Result(false,"更新失败");
         }
     }
+
+    @RequestMapping("/shangjia.do")
+    public Result shangjia(Long id,String marketable){
+        try {
+            goodsService.shangjia(id,marketable);
+            return new Result(true,"操作成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false,"操作失败");
+        }
+    }
+
+    @RequestMapping("/xiajia.do")
+    public Result xiajia(Long id,String marketable){
+        try {
+            goodsService.xiajia(id,marketable);
+            return new Result(true,"操作成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false,"操作失败");
+        }
+    }
 }

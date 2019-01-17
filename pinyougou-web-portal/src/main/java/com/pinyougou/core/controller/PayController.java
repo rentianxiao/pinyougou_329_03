@@ -58,6 +58,22 @@ public class PayController {
                 e.printStackTrace();
             }
         }
+    }
 
+    @RequestMapping("orderClose.do")
+    public Result orderClose(String out_trade_no) throws Exception {
+        int time=0;
+        while (true){
+            Thread.sleep(5000);
+            time++;
+            if (time>12){
+                Map<String, String> map = payService.orderClose(out_trade_no);
+                if ("SUCCESS".equals(map.get("result_code"))){
+                    return new Result(true,"订单支付关闭");
+                }else {
+                    return new Result(false,"订单支付关闭失败");
+                }
+            }
+        }
     }
 }

@@ -39,6 +39,17 @@ app.controller('payController' ,function($scope ,$location,payService){
 			}		
 		);		
 	}
+
+    //关闭订单支付
+    $scope.orderClose=function(){
+        payService.orderClose($scope.out_trade_no).success(
+            function(response){
+                if(response.flag){
+                            location.href="payclose.html";
+                }
+            }
+        );
+    }
 	
 	//获取金额
 	$scope.getMoney=function(){

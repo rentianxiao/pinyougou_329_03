@@ -55,4 +55,17 @@ public interface GoodsService {
      * @param ids
      */
     public void delete(Long[] ids);
+    /**
+     * 商品上架
+     * @param id
+     * @param isMarketable
+     */
+    public void shangjia(Long id,String isMarketable);
+
+    /**
+     * 商品下架
+     * @param id
+     * @param isMarketable
+     */
+    public void xiajia(Long id,String isMarketable);
 }
