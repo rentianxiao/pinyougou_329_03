@@ -2,9 +2,26 @@ package cn.itcast.core.pojo.order;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Order implements Serializable {
+
+    //一个订单对应多个订单明细
+    private List<OrderItem> OrderItemList = new ArrayList<>();
+
+    //商品名称
+    private String nick_name;
+
+    public String getNick_name() {
+        return nick_name;
+    }
+
+    public void setNick_name(String nick_name) {
+        this.nick_name = nick_name;
+    }
+
     /**
      * 订单id
      */
@@ -131,6 +148,14 @@ public class Order implements Serializable {
     private String sellerId;
 
     private static final long serialVersionUID = 1L;
+
+    public List<OrderItem> getOrderItemList() {
+        return OrderItemList;
+    }
+
+    public void setOrderItemList(List<OrderItem> orderItemList) {
+        OrderItemList = orderItemList;
+    }
 
     public Long getOrderId() {
         return orderId;

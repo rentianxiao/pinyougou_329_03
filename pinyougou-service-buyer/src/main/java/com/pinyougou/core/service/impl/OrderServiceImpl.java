@@ -5,6 +5,7 @@ import cn.itcast.core.dao.log.PayLogDao;
 import cn.itcast.core.dao.order.OrderDao;
 import cn.itcast.core.dao.order.OrderItemDao;
 import cn.itcast.core.pojo.cart.Cart;
+import cn.itcast.core.pojo.entity.Result;
 import cn.itcast.core.pojo.item.Item;
 import cn.itcast.core.pojo.log.PayLog;
 import cn.itcast.core.pojo.order.Order;
@@ -132,7 +133,19 @@ public class OrderServiceImpl implements OrderService {
         OrderQuery.Criteria orderListByUid = orderQuery.createCriteria().andUserIdEqualTo(userName);
         List<Order> orderList = orderDao.selectByExample(orderQuery);
         return orderList;
+    }
 
+    /**
+     * 修改订单状态
+     * @param orderId
+     * @return
+     */
+    @Transactional
+    @Override
+    public void updateOrderStatus(Long orderId) {
+        OrderQuery orderQuery = new OrderQuery();
+        orderQuery.createCriteria().andOrderIdEqualTo(orderId).andStatusEqualTo("2");
+        orderDao.selectByExample(orderQuery);
     }
 
 

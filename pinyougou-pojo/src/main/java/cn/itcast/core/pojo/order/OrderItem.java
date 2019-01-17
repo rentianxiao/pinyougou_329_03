@@ -1,10 +1,16 @@
 package cn.itcast.core.pojo.order;
 
+import cn.itcast.core.pojo.item.Item;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class OrderItem implements Serializable {
+
     private Long id;
 
     /**
@@ -48,6 +54,36 @@ public class OrderItem implements Serializable {
     private String picPath;
 
     private String sellerId;
+
+    private BigDecimal costPirce;
+
+    private BigDecimal marketPrice;
+
+    public BigDecimal getCostPirce() {
+        return costPirce;
+    }
+
+    public void setCostPirce(BigDecimal costPirce) {
+        this.costPirce = costPirce;
+    }
+
+    public BigDecimal getMarketPrice() {
+        return marketPrice;
+    }
+
+    public void setMarketPrice(BigDecimal marketPrice) {
+        this.marketPrice = marketPrice;
+    }
+
+    private Map<String,String> spellMap;
+
+    public Map<String, String> getSpellMap() {
+        return spellMap;
+    }
+
+    public void setSpellMap(Map<String, String> spellMap) {
+        this.spellMap = spellMap;
+    }
 
     private static final long serialVersionUID = 1L;
 

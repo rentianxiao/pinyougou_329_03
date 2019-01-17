@@ -1,5 +1,6 @@
 package com.pinyougou.core.service;
 
+import cn.itcast.core.pojo.entity.Result;
 import cn.itcast.core.pojo.order.Order;
 
 import java.util.List;
@@ -18,4 +19,9 @@ public interface OrderService {
      * @param userName
      */
     public List<Order> findAll(String  userName);
+
+    /**
+     * 修改订单状态
+     */
+    public void updateOrderStatus(Long orderId);
 }

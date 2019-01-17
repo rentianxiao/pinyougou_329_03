@@ -6,13 +6,16 @@ app.service('userService',function($http){
 		return $http.get('../user/findAll.do');		
 	}
 	//分页 
-	this.findPage=function(page,rows){
-		return $http.get('../user/findPage.do?page='+page+'&rows='+rows);
+	this.findPage=function(page,rows,status){
+		return $http.get('../user/findPage.do?page='+page+'&rows='+rows+'&status='+status);
 	}
 	//查询实体
 	this.findOne=function(id){
 		return $http.get('../user/findOne.do?id='+id);
 	}
+    this.findUser=function(){
+        return $http.get('../user/findUser.do');
+    }
 	//增加 
 	this.add=function(entity,smscode){
 		return  $http.post('../user/add.do?smscode='+smscode,entity );
@@ -27,11 +30,15 @@ app.service('userService',function($http){
 	}
 	//搜索
 	this.search=function(page,rows,searchEntity){
-		return $http.post('../user/search.do?page='+page+"&rows="+rows, searchEntity);
+		return $http.post('../user/search.do?page='+page+"&rows="+rows,searchEntity);
 	}
 	//发送验证码
 	this.sendCode=function(phone){
 		return $http.get('../user/sendCode.do?phone='+phone);
 	}
+
+	this.databyorderId=function (order_id) {
+		return $http.get('../user/databyorderId.do?order_id='+order_id);
+    }
 	
 });
