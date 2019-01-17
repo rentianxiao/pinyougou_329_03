@@ -13,7 +13,13 @@ app.controller("baseController",function($scope){
 	$scope.reloadList = function(){
 		// $scope.findByPage($scope.paginationConf.currentPage,$scope.paginationConf.itemsPerPage);
 		$scope.search($scope.paginationConf.currentPage,$scope.paginationConf.itemsPerPage);
+		// $scope.findOrderBySellerId();
 	}
+    $scope.reloadListWith = function(){
+        // $scope.findByPage($scope.paginationConf.currentPage,$scope.paginationConf.itemsPerPage);
+        // $scope.search($scope.paginationConf.currentPage,$scope.paginationConf.itemsPerPage);
+        $scope.findOrderBySellerId();
+    }
 	
 	// 定义一个数组:
 	$scope.selectIds = [];
@@ -58,5 +64,6 @@ app.controller("baseController",function($scope){
 		
 		return null;
 	}
-	
+
+
 });

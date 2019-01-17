@@ -21,6 +21,7 @@ public interface OrderDao {
 
     Order selectByPrimaryKey(Long orderId);
 
+
     int updateByExampleSelective(@Param("record") Order record, @Param("example") OrderQuery example);
 
     int updateByExample(@Param("record") Order record, @Param("example") OrderQuery example);

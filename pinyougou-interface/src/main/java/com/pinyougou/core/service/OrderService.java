@@ -1,6 +1,7 @@
 package com.pinyougou.core.service;
 
 import cn.itcast.core.pojo.order.Order;
+import cn.itcast.core.pojo.order.OrderItem;
 
 import java.util.List;
 
@@ -18,4 +19,6 @@ public interface OrderService {
      * @param userName
      */
     public List<Order> findAll(String  userName);
+
+
 }
