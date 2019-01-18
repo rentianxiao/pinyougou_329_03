@@ -2,12 +2,13 @@ package cn.itcast.core.dao.good;
 
 import cn.itcast.core.pojo.good.Brand;
 import cn.itcast.core.pojo.good.BrandQuery;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
+
 public interface BrandDao {
+
     int countByExample(BrandQuery example);
 
     int deleteByExample(BrandQuery example);
@@ -30,9 +31,22 @@ public interface BrandDao {
 
     int updateByPrimaryKey(Brand record);
 
+    /*回显品牌*/
+    List<Brand> selectByName(@Param("name") String name);
+
+
+    /*
+     * 新增模板时根据状态
+     * 初始化品牌列表    --张斌
+     *
+     * */
+    List<Map<String,String>> selectOption(String status);
+
     //批量删除
     void deleteByPrimaryKeys(Long[] ids);
 
     //新增模板时初始化品牌列表
     List<Map<String,String>> selectOptionList();
+
+
 }

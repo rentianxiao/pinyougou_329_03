@@ -3,6 +3,7 @@ package com.pinyougou.core.service.impl;
 import cn.itcast.core.dao.specification.SpecificationOptionDao;
 import cn.itcast.core.dao.template.TypeTemplateDao;
 import cn.itcast.core.pojo.entity.PageResult;
+import cn.itcast.core.pojo.good.Brand;
 import cn.itcast.core.pojo.specification.SpecificationOption;
 import cn.itcast.core.pojo.specification.SpecificationOptionQuery;
 import cn.itcast.core.pojo.template.TypeTemplate;
@@ -112,6 +113,25 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
         }
         //specList:[{"id":27,"text":"网络","options":[{},{}...]}]
         return specList;
+    }
+
+    /**
+     * 更新模板状态
+     * @param ids
+     * @param Status
+     */
+    @Transactional
+    @Override
+    public void updateStatus(Long[] ids, String Status) {
+        if (ids != null && ids.length > 0) {
+            TypeTemplate typeTemplate = new TypeTemplate();
+            typeTemplate.setStatus(Status);
+            for (final Long id : ids) {
+                typeTemplate.setId(id);
+                //1、更新商品的审核状态
+                typeTemplateDao.updateByPrimaryKeySelective(typeTemplate);
+            }
+        }
     }
 
     /**

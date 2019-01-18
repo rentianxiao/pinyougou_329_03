@@ -28,4 +28,10 @@ public interface TypeTemplateDao {
     int updateByPrimaryKeySelective(TypeTemplate record);
 
     int updateByPrimaryKey(TypeTemplate record);
+
+    /*回显模板
+    * --张斌
+    * */
+    List<TypeTemplate> select(@Param("name") String name);
+
 }

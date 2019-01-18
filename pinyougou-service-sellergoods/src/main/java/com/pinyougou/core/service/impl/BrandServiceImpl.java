@@ -4,13 +4,19 @@ import cn.itcast.core.dao.good.BrandDao;
 import cn.itcast.core.pojo.entity.PageResult;
 import cn.itcast.core.pojo.good.Brand;
 import cn.itcast.core.pojo.good.BrandQuery;
+import cn.itcast.core.pojo.good.Goods;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.pinyougou.core.service.BrandService;
+import org.springframework.jms.core.MessageCreator;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.Session;
+import javax.jms.TextMessage;
 import java.util.List;
 import java.util.Map;
 
@@ -145,6 +151,25 @@ public class BrandServiceImpl implements BrandService {
     @Override
     public List<Map<String, String>> selectOptionList() {
         return brandDao.selectOptionList();
+    }
+
+    /**
+     * 更新品牌状态
+     * @param ids
+     * @param Status
+     */
+    @Transactional
+    @Override
+    public void updateStatus(Long[] ids, String Status) {
+        if (ids != null && ids.length > 0) {
+            Brand brand = new Brand();
+            brand.setBrandStatus(Status);
+            for (final Long id : ids) {
+                brand.setId(id);
+                //1、更新商品的审核状态
+                brandDao.updateByPrimaryKeySelective(brand);
+            }
+        }
     }
 
 

@@ -2,10 +2,10 @@ package cn.itcast.core.dao.specification;
 
 import cn.itcast.core.pojo.specification.Specification;
 import cn.itcast.core.pojo.specification.SpecificationQuery;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
 import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
 
 public interface SpecificationDao {
     int countByExample(SpecificationQuery example);
@@ -29,6 +29,15 @@ public interface SpecificationDao {
     int updateByPrimaryKeySelective(Specification record);
 
     int updateByPrimaryKey(Specification record);
+
+    List<Specification> selectByName(@Param("name") String name);
+    /*
+     * 新增模板时根据状态
+     * 初始化品牌列表    --张斌
+     *
+     * */
+    List<Map<String,String>> selectOption(String status);
+
 
     /**
      * 批量删除

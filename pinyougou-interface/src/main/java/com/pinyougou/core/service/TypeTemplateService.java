@@ -40,4 +40,11 @@ public interface TypeTemplateService {
      * @return
      */
     public List<Map> findBySpecList(Long id);
+
+    /**
+     * 更新模板状态
+     * @param ids
+     * @param status
+     */
+    void updateStatus(Long[] ids, String status);
 }
