@@ -148,4 +148,52 @@ public class BrandServiceImpl implements BrandService {
     }
 
 
+
+
+    /*
+    * 通过用户名查询全部 --张斌
+    * */
+    @Override
+    public List<Brand> findAllByUser(String name) {
+
+        return brandDao.selectByName(name);
+
+    }
+
+    /*添加品牌 --张斌*/
+    @Transactional
+    @Override
+    public void add(Brand brand,String name) {
+        brand.setBrandStatus("0");
+        brand.setSellerId(name);
+        brandDao.insertSelective(brand);
+    }
+
+    /*
+    * 修改审核状态 --张斌
+    * */
+    @Override
+    public void updateStatus(Long[] ids, String status) {
+        if (ids != null && ids.length > 0) {
+            Brand brand = new Brand();
+            brand.setBrandStatus(status);
+            for (Long id : ids) {
+                brand.setId(id);
+                brandDao.updateByPrimaryKeySelective(brand);
+
+            }
+        }
+    }
+
+    /*
+    * 新增模板时根据状态
+    * 初始化品牌列表    --张斌
+    *
+    * */
+    @Override
+    public List<Map<String, String>> selectOption() {
+        String status="2";
+        return brandDao.selectOption(status);
+    }
+
 }

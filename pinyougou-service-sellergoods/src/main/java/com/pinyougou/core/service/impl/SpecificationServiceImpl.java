@@ -144,4 +144,67 @@ public class SpecificationServiceImpl implements SpecificationService {
     public List<Map<String, String>> selectOptionList() {
         return specificationDao.selectOptionList();
     }
+
+
+
+
+
+    /*
+     * 通过用户名查询全部 --张斌
+     * */
+    @Override
+    public List<Specification> findAllByUser(String name) {
+
+        return specificationDao.selectByName(name);
+    }
+    /*添加品牌 --张斌*/
+    @Transactional
+    @Override
+    public void addList(SpecificationVo specVo, String name) {
+        Specification specification = specVo.getSpecification();
+        specification.setSellerId(name);
+        specification.setStatus("0");
+        specificationDao.insert(specification);
+        List<SpecificationOption> specificationOptionList = specVo.getSpecificationOptionList();
+        for (SpecificationOption specificationOption : specificationOptionList) {
+            specificationOption.setId(specification.getId());
+            specificationOptionDao.insert(specificationOption);
+        }
+
+
+
+    }
+    /*
+     * 修改审核状态 --张斌
+     * */
+    @Override
+    public void update(Long[] ids, String status) {
+        if (ids != null && ids.length > 0) {
+            Specification specification = new Specification();
+            specification.setStatus(status);
+            for (Long id : ids) {
+                specification.setId(id);
+                specificationDao.updateByPrimaryKeySelective(specification);
+
+            }
+        }
+
+
+    }
+    /*
+     * 新增模板时根据状态
+     * 初始化品牌列表    --张斌
+     *
+     * */
+    @Override
+    public List<Map<String, String>> selectOption() {
+        String status="2";
+        return specificationDao.selectOption(status);
+    }
+
+
+
+
+
+
 }

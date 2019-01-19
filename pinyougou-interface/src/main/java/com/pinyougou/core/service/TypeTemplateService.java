@@ -40,4 +40,22 @@ public interface TypeTemplateService {
      * @return
      */
     public List<Map> findBySpecList(Long id);
+
+
+    /*回显模板
+    * -- 张斌
+    * */
+    List<TypeTemplate> findAll(String name);
+
+    /*添加
+    * -- 张斌
+    * */
+    void insert(TypeTemplate typeTemplate,String name);
+    /*提交申请
+     * -- 张斌
+     * */
+    void updateStatus(Long[] ids, String status);
+
+
+
 }

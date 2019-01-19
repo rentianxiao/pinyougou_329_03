@@ -1,8 +1,11 @@
 package com.pinyougou.core.controller;
 
+import cn.itcast.core.pojo.entity.Result;
 import cn.itcast.core.pojo.item.ItemCat;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.pinyougou.core.service.ItemCatService;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,31 +19,49 @@ public class ItemCatController {
     private ItemCatService itemCatService;
 
     /**
-     * 商品录入加载分类列表
-     * @param parentId
-     * @return
-     */
-    @RequestMapping("/findByParentId.do")
-    public List<ItemCat> findByParentId(Long parentId){
-        return itemCatService.findByParentId(parentId);
-    }
-
-    /**
-     * 根据三级分类加载模板ID
-     * @param id
-     * @return
-     */
-    @RequestMapping("findOne.do")
-    public ItemCat findOne(Long id){
-        return itemCatService.findOne(id);
-    }
-
-    /**
-     * 商品的列表回显具体的分类名称
+     * 商品列表回显具体的分类名称
      * @return
      */
     @RequestMapping("/findAll.do")
     public List<ItemCat> findAll(){
-        return itemCatService.findAll();
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        return itemCatService.findByName(name);
+    }
+
+    /*商品分类列表查询*/
+    @RequestMapping("/findByParentId.do")
+    public List<ItemCat> findByParentId(Long parentId){
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        return itemCatService.findByParentId(parentId,name);
+    }
+
+
+    @RequestMapping("updateStatus.do")
+    public Result updateStatus(Long[]ids, String status){
+
+        try {
+            itemCatService.updateStatus(ids,status);
+            return new Result(true,"成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false,"失败");
+        }
+    }
+
+
+    @RequestMapping("add.do")
+    public Result save(@RequestBody ItemCat itemCat){
+        try {
+            String name = SecurityContextHolder.getContext().getAuthentication().getName();
+            itemCatService.save(itemCat,name);
+            return new Result(true,"成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false,"失败");
+        }
+
+
+
+
     }
 }
