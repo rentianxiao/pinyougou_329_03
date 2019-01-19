@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>品牌管理</title>
+    <title>用户管理</title>
     <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
     <link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
@@ -18,17 +18,16 @@
     <script type="text/javascript" src="../plugins/angularjs/pagination.js"></script>
     <link rel="stylesheet" href="../plugins/angularjs/pagination.css">
     
-    <script type="text/javascript" src="../js/base_pagination.js"></script>
-    <script type="text/javascript" src="../js/controller/baseController.js"></script>
-    <script type="text/javascript" src="../js/controller/brandController.js"></script>
-    <script type="text/javascript" src="../js/service/brandService.js"></script>
+    <script type="text/javascript" src="../js/base_pagination.js"></script><script type="text/javascript" src="../js/controller/baseController.js"></script>
+    <script type="text/javascript" src="../js/controller/userController.js"></script>
+    <script type="text/javascript" src="../js/service/userService.js"></script>
 </head>
-<body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="brandController">
+<body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="userController">
   <!-- .box-body -->
                     <div class="box-header with-border">
-                        <h3 class="box-title">品牌管理</h3>
+                        <h3 class="box-title">用户管理&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp用户人数:{{paginationConf.totalItems}}</h3>
+						<h3 class="box-title">用户活跃人数:3</h3>
                     </div>
-
                     <div class="box-body">
 
                         <!-- 数据表格 -->
@@ -38,17 +37,15 @@
                             <div class="pull-left">
                                 <div class="form-group form-inline">
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-default" title="新建" data-toggle="modal" data-target="#editModal" ng-click="entity={}"><i class="fa fa-file-o"></i> 新建</button>
-                                        <button type="button" class="btn btn-default" title="删除" ng-click="dele()"><i class="fa fa-trash-o"></i> 删除</button>           
-										<button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i class="fa fa-refresh"></i> 刷新</button>
-										<button type="button" ng-click="updateStatus('1')" class="btn btn-default" title="审核通过" ><i class="fa fa-check"></i> 审核通过</button>
-										<button type="button" ng-click="updateStatus('2')" class="btn btn-default" title="驳回" ><i class="fa fa-ban"></i> 驳回</button>
-									</div>
+                                        <button type="button" class="btn btn-default" title="冻结用户" ng-click="updateStatus('1')"><i class="fa fa-file-o"></i> 冻结用户</button>
+										<button type="button" class="btn btn-default" title="解除用户" ng-click="updateStatus('0')"><i class="fa fa-trash-o"></i> 解除用户</button>
+                                        <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i class="fa fa-refresh"></i> 刷新</button>
+                                    </div>
                                 </div>
                             </div>
                             <div class="box-tools pull-right">
                                 <div class="has-feedback">
-							          品牌名称:<input type="text" ng-model="searchEntity.name"> 品牌首字母:<input type="text" ng-model="searchEntity.firstChar"> <input class="btn btn-default" ng-click="reloadList()" type="button" value="查询">                               
+							          用户名称:<input type="text" ng-model="searchEntity.name"><input class="btn btn-default" ng-click="reloadList()" type="button" value="查询">
                                 </div>
                             </div>
                             <!--工具栏/-->
@@ -60,40 +57,31 @@
 			                              <th class="" style="padding-right:0px">
 			                                  <input id="selall" type="checkbox" class="icheckbox_square-blue">
 			                              </th> 
-										  <th class="sorting_asc">品牌ID</th>
-									      <th class="sorting">品牌名称</th>									      
-									      <th class="sorting">品牌首字母</th>
-
-					                      <th class="text-center">操作</th>
+										  <th class="sorting_asc">用户ID</th>
+									      <th class="sorting">用户名称</th>
+									      <th class="sorting">用户联系方式</th>
+										  <th class="sorting">用户状态</th>
 			                          </tr>
 			                      </thead>
 			                      <tbody>
 			                          <tr ng-repeat="entity in list">
 			                              <td><input  type="checkbox" ng-click="updateSelection($event,entity.id)"></td>			                              
 				                          <td>{{entity.id}}</td>
-									      <td>{{entity.name}}</td>									     
-		                                  <td>{{entity.firstChar}}</td>
+									      <td>{{entity.username}}</td>
+		                                  <td>{{entity.phone}}</td>
 										  <td>
 		                                  	<span>
-		                                  		{{status[entity.brandStatus]}}
+		                                  		{{status[entity.status]}}
 		                                  	</span>
-
 										  </td>
-										  <td class="text-center">
-		                                 	  <button type="button" class="btn bg-olive btn-xs" ng-click="findById(entity.id)" data-toggle="modal" data-target="#editModal"  >修改</button>                                           
-		                                  </td>
 			                          </tr>
-									  
 			                      </tbody>
 			                  </table>
-			                  <!--数据列表/-->                        
-							  
-							 
+			                  <!--数据列表/-->
                         </div>
                         <!-- 数据表格 /-->
                         <!-- 分页 -->
 						<tm-pagination conf="paginationConf"></tm-pagination>
-                        
                      </div>
                     <!-- /.box-body -->
          
