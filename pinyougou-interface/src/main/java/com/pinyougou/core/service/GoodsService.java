@@ -71,5 +71,9 @@ public interface GoodsService {
      */
     public void xiajia(Long id,String isMarketable);
 
+    /**
+     * 运营商查询所有商品
+     * @return
+     */
     List<Goods> findAll();
 }
