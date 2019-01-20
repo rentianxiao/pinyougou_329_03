@@ -3,6 +3,7 @@ package com.pinyougou.core.service;
 import cn.itcast.core.pojo.order.Order;
 
 import java.util.List;
+import java.util.Map;
 
 public interface OrderService {
 
@@ -18,4 +19,13 @@ public interface OrderService {
      * @param userName
      */
     public List<Order> findAll(String  userName);
+
+    public List<Map<String, String>> findOne();
+
+    public List findName();
+
+    public List findShop(String name);
+
+
+
 }

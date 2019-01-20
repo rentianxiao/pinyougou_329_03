@@ -5,6 +5,7 @@ import cn.itcast.core.pojo.order.OrderItemQuery;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface OrderItemDao {
     int countByExample(OrderItemQuery example);
@@ -28,4 +29,10 @@ public interface OrderItemDao {
     int updateByPrimaryKeySelective(OrderItem record);
 
     int updateByPrimaryKey(OrderItem record);
+
+    List<Map<String,String>>FindBiao();
+
+    List<String> FindName();
+
+    List<Map<String,String>>FindShop (@Param("Name") String name);
 }

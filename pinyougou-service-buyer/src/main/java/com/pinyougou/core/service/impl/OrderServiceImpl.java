@@ -18,9 +18,7 @@ import util.IdWorker;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -134,6 +132,32 @@ public class OrderServiceImpl implements OrderService {
         return orderList;
 
     }
+
+    @Override
+    public  List<Map<String, String>> findOne() {
+        List<Map<String, String>> list = orderItemDao.FindBiao();
+        HashMap<String, ArrayList<String>> map = new HashMap<>();
+
+
+       /* String o = (String) JSONObject.fromObject(map);
+        System.out.println(o.toString());*/
+        return list;
+    }
+
+    @Override
+    public List findName() {
+        List<String> list = orderItemDao.FindName();
+        System.out.println(list);
+        return list;
+    }
+
+    @Override
+    public List findShop(String name) {
+        List<Map<String, String>> list = orderItemDao.FindShop(name);
+        return list;
+    }
+
+
 
 
 }

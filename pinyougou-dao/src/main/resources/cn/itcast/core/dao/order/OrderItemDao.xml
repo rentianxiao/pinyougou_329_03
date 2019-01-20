@@ -292,4 +292,17 @@
       seller_id = #{sellerId,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <select id="FindBiao" resultType="map">
+    SELECT title name,sum(num) value FROM tb_order_item GROUP BY title
+  </select>
+  <select id="FindName"  resultType="string">
+    SELECT seller_id name FROM tb_order_item GROUP BY seller_id
+  </select>
+  <select id="FindShop" resultType="map">
+    SELECT  SUM(num) value ,title name FROM (SELECT * FROM tb_order_item WHERE seller_id =#{Name}) dd GROUP BY title
+  </select>
+  <select id="FindOrder" resultType="string">
+    SELECT * FROM tb_order WHERE create_time BETWEEN #{Time} AND #{Name}
+  </select>
+
 </mapper>
